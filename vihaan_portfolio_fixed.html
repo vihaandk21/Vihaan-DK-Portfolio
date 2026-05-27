@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vihaan — Creative Tech Explorer</title>
+  <meta name="description" content="Vihaan's portfolio — 15 y/o creative tech enthusiast from India. Gaming, web design, animations, and building the future of the internet." />
+  <meta property="og:title" content="Vihaan — Creative Tech Explorer" />
+  <meta property="og:description" content="15 y/o creative tech enthusiast who builds, games, and creates." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+
+  <!-- Fonts: Inter for body, Space Grotesk for headings — premium pairing -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM — Tokens & Variables
+       ============================================================ */
+    :root {
+      --bg-primary: #06060e;
+      --bg-secondary: #0c0c1d;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --bg-card-hover: rgba(255, 255, 255, 0.06);
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(255, 255, 255, 0.12);
+
+      --text-primary: #e8e6f0;
+      --text-secondary: rgba(232, 230, 240, 0.55);
+      --text-muted: rgba(232, 230, 240, 0.3);
+
+      --accent-violet: #8b5cf6;
+      --accent-indigo: #6366f1;
+      --accent-cyan: #22d3ee;
+      --accent-rose: #f472b6;
+      --accent-emerald: #34d399;
+
+      --gradient-primary: linear-gradient(135deg, #8b5cf6, #6366f1, #8b5cf6);
+      --gradient-accent: linear-gradient(135deg, #8b5cf6 0%, #22d3ee 50%, #34d399 100%);
+      --gradient-text: linear-gradient(135deg, #c084fc, #818cf8, #22d3ee);
+      --gradient-glow: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(139, 92, 246, 0.06), transparent 40%);
+
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 28px;
+      --radius-full: 9999px;
+
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      --section-gap: clamp(100px, 12vw, 160px);
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(139, 92, 246, 0.3) transparent;
+    }
+
+    /* Custom scrollbar for Webkit browsers */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(139, 92, 246, 0.3);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Noise texture overlay for depth */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 10000;
+      opacity: 0.4;
+    }
+
+    /* Mouse-following gradient glow on the page */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: var(--gradient-glow);
+      pointer-events: none;
+      z-index: -1;
+      transition: background 0.3s ease;
+    }
+
+    /* Selection highlight */
+    ::selection {
+      background: rgba(139, 92, 246, 0.3);
+      color: #fff;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img { display: block; max-width: 100%; }
+
+    /* ============================================================
+       PRELOADER
+       ============================================================ */
+    .preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: var(--bg-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 24px;
+      transition: opacity 0.8s var(--ease-out-expo), visibility 0.8s;
+    }
+
+    .preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .preloader-name {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.03em;
+    }
+
+    .preloader-bar {
+      width: 200px;
+      height: 2px;
+      background: var(--border-subtle);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .preloader-bar::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-accent);
+      animation: preloaderSlide 1.2s var(--ease-out-expo) forwards;
+      transform-origin: left;
+    }
+
+    @keyframes preloaderSlide {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    /* ============================================================
+       CUSTOM CURSOR (desktop only)
+       ============================================================ */
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 99998;
+      mix-blend-mode: difference;
+      transition: transform 0.15s var(--ease-spring), width 0.3s, height 0.3s;
+    }
+
+    .cursor-ring {
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 99997;
+      transition: width 0.4s var(--ease-spring), height 0.4s var(--ease-spring),
+                  border-color 0.3s, transform 0.08s linear;
+    }
+
+    .cursor-ring.hovering {
+      width: 60px;
+      height: 60px;
+      border-color: var(--accent-violet);
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      .cursor-dot, .cursor-ring { display: none; }
+    }
+
+    /* ============================================================
+       PARTICLE CANVAS — subtle ambient background
+       ============================================================ */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       NAVIGATION
+       ============================================================ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      padding: 0 clamp(24px, 5vw, 60px);
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+
+    .nav.scrolled {
+      background: rgba(6, 6, 14, 0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo .logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-violet);
+      box-shadow: 0 0 12px var(--accent-violet);
+      animation: logoPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent-violet);
+      border-radius: 2px;
+      transition: width 0.3s var(--ease-out-expo);
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 32px;
+      height: 24px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      position: absolute;
+      left: 0;
+      transition: all 0.3s var(--ease-out-expo);
+    }
+
+    .hamburger span:nth-child(1) { top: 0; }
+    .hamburger span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+    .hamburger span:nth-child(3) { bottom: 0; }
+
+    .hamburger.active span:nth-child(1) {
+      top: 50%; transform: translateY(-50%) rotate(45deg);
+    }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) {
+      bottom: 50%; transform: translateY(50%) rotate(-45deg);
+    }
+
+    /* ============================================================
+       LAYOUT CONTAINERS
+       ============================================================ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(24px, 5vw, 60px);
+    }
+
+    section {
+      padding-top: var(--section-gap);
+      padding-bottom: var(--section-gap);
+    }
+
+    /* ============================================================
+       SECTION LABEL — small eyebrow text above headings
+       ============================================================ */
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-violet);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--accent-violet);
+    }
+
+    /* ============================================================
+       SECTION HEADING
+       ============================================================ */
+    .section-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .section-desc {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       SCROLL REVEAL ANIMATION
+       ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ============================================================
+       HERO SECTION
+       ============================================================ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .hero-badge .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px var(--accent-emerald);
+      animation: logoPulse 2s ease-in-out infinite;
+    }
+
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(3.2rem, 8vw, 7rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 .gradient-text {
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% 200%;
+      animation: gradientShift 8s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .hero-description {
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      color: var(--text-secondary);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 44px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.4s var(--ease-out-expo);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: var(--accent-violet);
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 8px 40px rgba(139, 92, 246, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card);
+      transform: translateY(-2px);
+    }
+
+    /* ============================================================
+       HERO SCROLL INDICATOR
+       ============================================================ */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .scroll-indicator .mouse {
+      width: 20px;
+      height: 32px;
+      border: 1.5px solid var(--text-muted);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .scroll-indicator .mouse::after {
+      content: '';
+      width: 3px;
+      height: 6px;
+      background: var(--text-muted);
+      border-radius: 2px;
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: scrollDown 1.8s ease-in-out infinite;
+    }
+
+    @keyframes scrollDown {
+      0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+      100% { opacity: 0; transform: translateX(-50%) translateY(12px); }
+    }
+
+    /* ============================================================
+       ABOUT — Asymmetric Bento Grid
+       ============================================================ */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .bento-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: clamp(28px, 3vw, 40px);
+      transition: all 0.5s var(--ease-out-expo);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bento-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gradient-glow);
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    .bento-item:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+    }
+
+    .bento-item:hover::before {
+      opacity: 1;
+    }
+
+    /* Span two columns for the first item */
+    .bento-item.wide {
+      grid-column: span 2;
+    }
+
+    .bento-item.tall {
+      grid-row: span 2;
+    }
+
+    .bento-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.15);
+    }
+
+    .bento-item h3 {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .bento-item p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    /* ============================================================
+       SKILLS — Marquee Scroll + Tags
+       ============================================================ */
+    .skills-section {
+      overflow: hidden;
+    }
+
+    .marquee-container {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow: hidden;
+      mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      animation: marquee 30s linear infinite;
+    }
+
+    .marquee-track.reverse {
+      animation-direction: reverse;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .skill-tag {
+      flex-shrink: 0;
+      padding: 14px 28px;
+      border-radius: var(--radius-full);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .skill-tag:hover {
+      border-color: var(--accent-violet);
+      background: rgba(139, 92, 246, 0.08);
+      color: #fff;
+    }
+
+    .skill-tag .tag-icon {
+      margin-right: 8px;
+    }
+
+    /* ============================================================
+       JOURNEY — Vertical Timeline
+       ============================================================ */
+    .timeline {
+      margin-top: 56px;
+      position: relative;
+      padding-left: 40px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent-violet), var(--accent-cyan), transparent);
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 48px;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -33px;
+      top: 6px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg-primary);
+      border: 2px solid var(--accent-violet);
+      z-index: 2;
+      transition: all 0.3s;
+    }
+
+    .timeline-item:hover .timeline-dot {
+      background: var(--accent-violet);
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.4);
+    }
+
+    .timeline-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-violet);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .timeline-title {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .timeline-desc {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.65;
+      max-width: 500px;
+    }
+
+    /* ============================================================
+       STATS — Animated Counters
+       ============================================================ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: clamp(28px, 3vw, 44px) 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      transition: all 0.5s var(--ease-out-expo);
+    }
+
+    .stat-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+    }
+
+    .stat-value {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       VISION — Big Quote Block
+       ============================================================ */
+    .vision-section {
+      position: relative;
+    }
+
+    .vision-block {
+      position: relative;
+      padding: clamp(40px, 6vw, 80px);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-top: 48px;
+    }
+
+    .vision-block::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient-accent);
+    }
+
+    .vision-block .quote-mark {
+      font-family: var(--font-heading);
+      font-size: 6rem;
+      line-height: 1;
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0.3;
+      position: absolute;
+      top: 20px;
+      left: 30px;
+    }
+
+    .vision-quote {
+      font-family: var(--font-heading);
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 500;
+      line-height: 1.4;
+      letter-spacing: -0.02em;
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+    }
+
+    .vision-quote .highlight {
+      background: var(--gradient-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .vision-author {
+      margin-top: 28px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .vision-author::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--text-secondary);
+    }
+
+    /* ============================================================
+       SECRET ZONE — Interactive Reveal Cards
+       ============================================================ */
+    .secret-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .secret-card {
+      position: relative;
+      padding: 36px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.5s var(--ease-out-expo);
+      overflow: hidden;
+    }
+
+    .secret-card::after {
+      content: 'CLICK TO REVEAL';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(6, 6, 14, 0.85);
+      backdrop-filter: blur(8px);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--accent-violet);
+      transition: opacity 0.5s var(--ease-out-expo);
+      border-radius: inherit;
+    }
+
+    .secret-card.revealed::after {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .secret-card:hover {
+      border-color: var(--accent-violet);
+      transform: translateY(-4px);
+    }
+
+    .secret-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .secret-card p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .site-footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 48px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-left {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .footer-left strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .footer-right .footer-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      animation: logoPulse 2s ease-in-out infinite;
+    }
+
+    /* ============================================================
+       HORIZONTAL DIVIDER
+       ============================================================ */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border-subtle);
+      border: none;
+      margin: 0;
+    }
+
+    /* ============================================================
+       RESPONSIVE DESIGN
+       ============================================================ */
+    @media (max-width: 1024px) {
+      .bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .bento-item.wide { grid-column: span 2; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .secret-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .hamburger { display: block; }
+
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100dvh;
+        background: rgba(6, 6, 14, 0.95);
+        backdrop-filter: blur(24px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 36px;
+        padding: 80px 40px;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        font-size: 1.2rem;
+        color: var(--text-primary);
+      }
+
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+      .bento-item.wide { grid-column: span 1; }
+
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .secret-grid { grid-template-columns: 1fr; }
+
+      .hero h1 {
+        font-size: clamp(2.4rem, 10vw, 4rem);
+      }
+
+      .scroll-indicator { display: none; }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============ PRELOADER ============ -->
+<div class="preloader" id="preloader">
+  <div class="preloader-name">Vihaan</div>
+  <div class="preloader-bar"></div>
+</div>
+
+<!-- ============ CUSTOM CURSOR ============ -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ============ PARTICLE CANVAS ============ -->
+<canvas id="particles"></canvas>
+
+<!-- ============ NAVIGATION ============ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <span class="logo-dot"></span>
+      Vihaan
+    </a>
+
+    <button class="hamburger" id="menuToggle" onclick="toggleMenu()" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navMenu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav-links" id="navMenu">
+      <li><a href="#about" onclick="closeMenu()">About</a></li>
+      <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
+      <li><a href="#journey" onclick="closeMenu()">Journey</a></li>
+      <li><a href="#stats" onclick="closeMenu()">Stats</a></li>
+      <li><a href="#vision" onclick="closeMenu()">Vision</a></li>
+      <li><a href="#secrets" onclick="closeMenu()">Secrets</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="container hero-content">
+    <div class="hero-badge reveal">
+      <span class="status-dot"></span>
+      Available for cool collabs
+    </div>
+
+    <h1>
+      <span class="reveal">Hey, I'm</span><br />
+      <span class="gradient-text reveal reveal-delay-1">Vihaan.</span>
+    </h1>
+
+    <p class="hero-description reveal reveal-delay-2">
+      15 y/o creative tech explorer from India. I build things for the
+      web, game competitively, and chase futuristic design ideas that
+      keep me up at 2 AM.
+    </p>
+
+    <div class="hero-actions reveal reveal-delay-3">
+      <button class="btn btn-primary" onclick="smoothScroll('#about')">
+        Explore My World
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </button>
+      <button class="btn btn-ghost" onclick="smoothScroll('#journey')">
+        See My Journey
+      </button>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="mouse"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ============ ABOUT — Bento Grid ============ -->
+<section id="about">
+  <div class="container">
+    <div class="section-label reveal">Who I Am</div>
+    <h2 class="section-heading reveal reveal-delay-1">
+      A gamer, builder, and<br />
+      future internet creator.
+    </h2>
+    <p class="section-desc reveal reveal-delay-2">
+      I'm driven by curiosity and a love for making things look impossibly cool on the web. Here's what keeps me going.
+    </p>
+
+    <div class="bento-grid">
+      <div class="bento-item wide reveal reveal-delay-1">
+        <div class="bento-icon">🎮</div>
+        <h3>Competitive Gamer</h3>
+        <p>Roblox, Blox Fruits, and every multiplayer game that gets my adrenaline going. I don't just play — I strategize, grind, and dominate leaderboards. Gaming taught me patience, teamwork, and how to think three moves ahead.</p>
+      </div>
+
+      <div class="bento-item reveal reveal-delay-2">
+        <div class="bento-icon">💻</div>
+        <h3>Tech Obsessed</h3>
+        <p>From PC builds to discovering the latest frameworks — if it involves technology, I'm already down the rabbit hole learning it.</p>
+      </div>
+
+      <div class="bento-item reveal reveal-delay-3">
+        <div class="bento-icon">🎨</div>
+        <h3>Design Thinker</h3>
+        <p>Neon gradients, glassmorphism, dark themes — I believe every pixel should tell a story and make someone stop scrolling.</p>
+      </div>
+
+      <div class="bento-item reveal reveal-delay-4">
+        <div class="bento-icon">⚡</div>
+        <h3>Animation Fanatic</h3>
+        <p>Static pages are dead. I'm obsessed with smooth transitions, micro-interactions, and making interfaces feel alive and responsive.</p>
+      </div>
+
+      <div class="bento-item wide reveal reveal-delay-5">
+        <div class="bento-icon">🚀</div>
+        <h3>Future Web Creator</h3>
+        <p>My ultimate goal? Build websites and digital experiences that make people say "WOW" the moment they land on the page. I'm not here to make boring cookie-cutter sites — I'm here to push the boundaries of what the web can feel like.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><hr class="divider" /></div>
+
+<!-- ============ SKILLS — Marquee ============ -->
+<section id="skills" class="skills-section">
+  <div class="container">
+    <div class="section-label reveal">What I Know</div>
+    <h2 class="section-heading reveal reveal-delay-1">
+      Tools, skills, and<br />
+      things I'm learning.
+    </h2>
+    <p class="section-desc reveal reveal-delay-2">
+      A mix of what I've picked up and what I'm chasing next. The list grows every single week.
+    </p>
+  </div>
+
+  <div class="marquee-container reveal reveal-delay-3">
+    <div class="marquee-track">
+      <span class="skill-tag"><span class="tag-icon">🖥️</span>HTML & CSS</span>
+      <span class="skill-tag"><span class="tag-icon">⚡</span>JavaScript</span>
+      <span class="skill-tag"><span class="tag-icon">🎮</span>Game Strategy</span>
+      <span class="skill-tag"><span class="tag-icon">🎨</span>UI Design</span>
+      <span class="skill-tag"><span class="tag-icon">✨</span>CSS Animations</span>
+      <span class="skill-tag"><span class="tag-icon">🌐</span>Web Development</span>
+      <span class="skill-tag"><span class="tag-icon">🔧</span>PC Building</span>
+      <span class="skill-tag"><span class="tag-icon">📐</span>Responsive Design</span>
+      <span class="skill-tag"><span class="tag-icon">💡</span>Creative Thinking</span>
+      <span class="skill-tag"><span class="tag-icon">🚀</span>Rapid Prototyping</span>
+      <!-- Duplicated for seamless loop -->
+      <span class="skill-tag"><span class="tag-icon">🖥️</span>HTML & CSS</span>
+      <span class="skill-tag"><span class="tag-icon">⚡</span>JavaScript</span>
+      <span class="skill-tag"><span class="tag-icon">🎮</span>Game Strategy</span>
+      <span class="skill-tag"><span class="tag-icon">🎨</span>UI Design</span>
+      <span class="skill-tag"><span class="tag-icon">✨</span>CSS Animations</span>
+      <span class="skill-tag"><span class="tag-icon">🌐</span>Web Development</span>
+      <span class="skill-tag"><span class="tag-icon">🔧</span>PC Building</span>
+      <span class="skill-tag"><span class="tag-icon">📐</span>Responsive Design</span>
+      <span class="skill-tag"><span class="tag-icon">💡</span>Creative Thinking</span>
+      <span class="skill-tag"><span class="tag-icon">🚀</span>Rapid Prototyping</span>
+    </div>
+    <div class="marquee-track reverse">
+      <span class="skill-tag"><span class="tag-icon">🧠</span>Problem Solving</span>
+      <span class="skill-tag"><span class="tag-icon">🎯</span>Pixel Perfection</span>
+      <span class="skill-tag"><span class="tag-icon">🔥</span>Motion Graphics</span>
+      <span class="skill-tag"><span class="tag-icon">🌈</span>Color Theory</span>
+      <span class="skill-tag"><span class="tag-icon">📱</span>Mobile-First Design</span>
+      <span class="skill-tag"><span class="tag-icon">🛠️</span>Dev Tools</span>
+      <span class="skill-tag"><span class="tag-icon">🎬</span>Video Editing</span>
+      <span class="skill-tag"><span class="tag-icon">💎</span>Glassmorphism</span>
+      <span class="skill-tag"><span class="tag-icon">🌙</span>Dark Mode Expert</span>
+      <span class="skill-tag"><span class="tag-icon">🏗️</span>Site Architecture</span>
+      <!-- Duplicated for seamless loop -->
+      <span class="skill-tag"><span class="tag-icon">🧠</span>Problem Solving</span>
+      <span class="skill-tag"><span class="tag-icon">🎯</span>Pixel Perfection</span>
+      <span class="skill-tag"><span class="tag-icon">🔥</span>Motion Graphics</span>
+      <span class="skill-tag"><span class="tag-icon">🌈</span>Color Theory</span>
+      <span class="skill-tag"><span class="tag-icon">📱</span>Mobile-First Design</span>
+      <span class="skill-tag"><span class="tag-icon">🛠️</span>Dev Tools</span>
+      <span class="skill-tag"><span class="tag-icon">🎬</span>Video Editing</span>
+      <span class="skill-tag"><span class="tag-icon">💎</span>Glassmorphism</span>
+      <span class="skill-tag"><span class="tag-icon">🌙</span>Dark Mode Expert</span>
+      <span class="skill-tag"><span class="tag-icon">🏗️</span>Site Architecture</span>
+    </div>
+  </div>
+</section>
+
+<div class="container"><hr class="divider" /></div>
+
+<!-- ============ JOURNEY — Timeline ============ -->
+<section id="journey">
+  <div class="container">
+    <div class="section-label reveal">The Path So Far</div>
+    <h2 class="section-heading reveal reveal-delay-1">
+      Every creator has<br />
+      an origin story.
+    </h2>
+    <p class="section-desc reveal reveal-delay-2">
+      Mine started with curiosity, a laptop, and an unstoppable urge to make things look cool.
+    </p>
+
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-dot"></div>
+        <div class="timeline-label">The Beginning</div>
+        <div class="timeline-title">Discovered the Internet</div>
+        <div class="timeline-desc">Started exploring websites, games, and realized the internet is basically an infinite playground for creative minds.</div>
+      </div>
+
+      <div class="timeline-item reveal reveal-delay-1">
+        <div class="timeline-dot"></div>
+        <div class="timeline-label">Level Up</div>
+        <div class="timeline-title">Fell Into Gaming</div>
+        <div class="timeline-desc">Roblox became an obsession. Blox Fruits grind taught me patience and strategy. Competitive gaming sharpened my reflexes and decision-making.</div>
+      </div>
+
+      <div class="timeline-item reveal reveal-delay-2">
+        <div class="timeline-dot"></div>
+        <div class="timeline-label">The Spark</div>
+        <div class="timeline-title">First Lines of Code</div>
+        <div class="timeline-desc">Wrote my first HTML page. It was ugly. But when I saw text appear on a screen because I typed it — that was it. I was hooked.</div>
+      </div>
+
+      <div class="timeline-item reveal reveal-delay-3">
+        <div class="timeline-dot"></div>
+        <div class="timeline-label">Evolution</div>
+        <div class="timeline-title">Design Obsession</div>
+        <div class="timeline-desc">Found CSS animations, gradients, and dark-themed designs. Started spending hours making things glow, move, and feel futuristic.</div>
+      </div>
+
+      <div class="timeline-item reveal reveal-delay-4">
+        <div class="timeline-dot"></div>
+        <div class="timeline-label">Right Now</div>
+        <div class="timeline-title">Building the Future</div>
+        <div class="timeline-desc">Learning JavaScript, exploring web frameworks, and working toward creating digital experiences that leave people speechless.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><hr class="divider" /></div>
+
+<!-- ============ STATS ============ -->
+<section id="stats">
+  <div class="container">
+    <div class="section-label reveal">By the Numbers</div>
+    <h2 class="section-heading reveal reveal-delay-1">
+      Quick stats about<br />
+      what drives me.
+    </h2>
+
+    <div class="stats-grid">
+      <div class="stat-card reveal reveal-delay-1">
+        <div class="stat-value" data-count="999">0</div>
+        <div class="stat-label">Gaming Energy</div>
+      </div>
+      <div class="stat-card reveal reveal-delay-2">
+        <div class="stat-value" data-count="50">0</div>
+        <div class="stat-label">Projects Imagined</div>
+      </div>
+      <div class="stat-card reveal reveal-delay-3">
+        <div class="stat-value" data-count="247">0</div>
+        <div class="stat-label">Late Night Ideas</div>
+      </div>
+      <div class="stat-card reveal reveal-delay-4">
+        <div class="stat-value" data-count="100">0</div>
+        <div class="stat-label">% Determination</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><hr class="divider" /></div>
+
+<!-- ============ VISION ============ -->
+<section id="vision" class="vision-section">
+  <div class="container">
+    <div class="section-label reveal">My Philosophy</div>
+    <h2 class="section-heading reveal reveal-delay-1">
+      What I believe in.
+    </h2>
+
+    <div class="vision-block reveal reveal-delay-2">
+      <div class="quote-mark">"</div>
+      <div class="vision-quote">
+        I want to create websites that make people <span class="highlight">stop scrolling, stare, and whisper "how did they do that?"</span> — that's the standard I hold myself to, even at 15.
+      </div>
+      <div class="vision-author">Vihaan, somewhere at 2 AM</div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><hr class="divider" /></div>
+
+<!-- ============ SECRETS ============ -->
+<section id="secrets">
+  <div class="container">
+    <div class="section-label reveal">Classified Info</div>
+    <h2 class="section-heading reveal reveal-delay-1">
+      The secret zone.
+    </h2>
+    <p class="section-desc reveal reveal-delay-2">
+      Some things about me you only discover if you're curious enough to click.
+    </p>
+
+    <div class="secret-grid">
+      <div class="secret-card reveal reveal-delay-1" onclick="revealSecret(this)" tabindex="0" role="button" aria-label="Reveal secret">
+        <h3>🕐 2 AM Routine</h3>
+        <p>My best design ideas hit at 2 AM when the world is quiet and my screen is the only light in the room. Peak creative hours.</p>
+      </div>
+
+      <div class="secret-card reveal reveal-delay-2" onclick="revealSecret(this)" tabindex="0" role="button" aria-label="Reveal secret">
+        <h3>🎨 Design Religion</h3>
+        <p>RGB lights, neon gradients, smooth transitions, dark backgrounds. I genuinely believe every website should feel like entering a different dimension.</p>
+      </div>
+
+      <div class="secret-card reveal reveal-delay-3" onclick="revealSecret(this)" tabindex="0" role="button" aria-label="Reveal secret">
+        <h3>🏆 The Real Goal</h3>
+        <p>Build something so impressive that when people see it, they don't believe a 15-year-old made it. That's the benchmark. Nothing less.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-left">
+      Crafted with obsession by <strong>Vihaan</strong>
+    </div>
+    <div class="footer-right">
+      <span class="footer-dot"></span>
+      Built from scratch, not a template
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  /* ---- PRELOADER ---- */
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('preloader').classList.add('hidden');
+    }, 1400);
+  });
+
+  /* ---- CUSTOM CURSOR ---- */
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  // Only run cursor logic on devices with a fine pointer
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.left = mouseX + 'px';
+      dot.style.top = mouseY + 'px';
+
+      // Update CSS variable for gradient glow
+      document.body.style.setProperty('--mouse-x', mouseX + 'px');
+      document.body.style.setProperty('--mouse-y', mouseY + 'px');
+    });
+
+    // Smooth follow for the ring
+    function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    // Expand ring on interactive elements
+    const hoverTargets = 'a, button, .secret-card, .bento-item, .stat-card, .skill-tag';
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest(hoverTargets)) ring.classList.add('hovering');
+    });
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest(hoverTargets)) ring.classList.remove('hovering');
+    });
+  } else {
+    // Hide cursor elements on touch devices
+    dot.style.display = 'none';
+    ring.style.display = 'none';
+  }
+
+  /* ---- PARTICLE CANVAS ---- */
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animFrameId;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 1.5 + 0.5;
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = (Math.random() - 0.5) * 0.3;
+      this.opacity = Math.random() * 0.3 + 0.05;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+        this.reset();
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(139, 92, 246, ${this.opacity})`;
+      ctx.fill();
+    }
+  }
+
+  // Create particles based on screen size (fewer on mobile)
+  const particleCount = window.innerWidth < 768 ? 30 : 60;
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+  }
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+
+    // Draw connections between nearby particles
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(139, 92, 246, ${0.04 * (1 - dist / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    animFrameId = requestAnimationFrame(animateParticles);
+  }
+  animateParticles();
+
+  // Pause particles when tab is hidden
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      cancelAnimationFrame(animFrameId);
+    } else {
+      animateParticles();
+    }
+  });
+
+  /* ---- NAV SCROLL STATE ---- */
+  const nav = document.getElementById('mainNav');
+  let lastScroll = 0;
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    nav.classList.toggle('scrolled', currentScroll > 50);
+    lastScroll = currentScroll;
+  }, { passive: true });
+
+  /* ---- SCROLL REVEAL ---- */
+  const revealElements = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target); // Only animate once
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  revealElements.forEach(el => revealObserver.observe(el));
+
+  /* ---- STAT COUNTER ANIMATION ---- */
+  const statValues = document.querySelectorAll('.stat-value[data-count]');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.getAttribute('data-count'), 10);
+        animateCounter(el, target);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  statValues.forEach(el => counterObserver.observe(el));
+
+  function animateCounter(el, target) {
+    const duration = 2000;
+    const start = performance.now();
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out expo
+      const eased = 1 - Math.pow(1 - progress, 4);
+      const current = Math.floor(eased * target);
+      el.textContent = current + (target === 999 ? '+' : target === 100 ? '%' : '+');
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  /* ---- CLOSE MENU ON OUTSIDE CLICK ---- */
+  document.addEventListener('click', (e) => {
+    const navEl = document.querySelector('.nav');
+    const menu = document.getElementById('navMenu');
+    if (!navEl.contains(e.target) && menu.classList.contains('open')) {
+      closeMenu();
+    }
+  });
+
+})();
+
+/* ---- GLOBAL FUNCTIONS (used by onclick handlers) ---- */
+function toggleMenu() {
+  const menu = document.getElementById('navMenu');
+  const btn = document.getElementById('menuToggle');
+  menu.classList.toggle('open');
+  btn.classList.toggle('active');
+  btn.setAttribute('aria-expanded', menu.classList.contains('open'));
+}
+
+function closeMenu() {
+  const menu = document.getElementById('navMenu');
+  const btn = document.getElementById('menuToggle');
+  menu.classList.remove('open');
+  btn.classList.remove('active');
+  btn.setAttribute('aria-expanded', 'false');
+}
+
+// Smooth scrolling for button onclick handlers
+function smoothScroll(selector) {
+  const target = document.querySelector(selector);
+
+  if (target) {
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+}
+
+// Secret card reveal
+function revealSecret(card) {
+  card.classList.toggle('revealed');
+}
+</script>
+
+</body>
+</html>
